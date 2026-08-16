@@ -27,6 +27,11 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 - Created `.env` with database credentials for all 3 sites (gitignored)
 - Generated `.env.example` as a safe template for GitHub
 
+### Step 5: Create docker-compose.yml (Site 1 only) ✅
+- Defined `db1` (MariaDB) and `wordpress1` services, connected via `wp_net` network
+- Defined `nginx-proxy` service to handle incoming traffic on port 80
+- Named volumes `db1_data` and `wp1_data` persist database and WordPress files
+
 ## Requirements
 - Ubuntu Server (tested on 26)
 - Docker Engine + Docker Compose plugin

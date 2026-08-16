@@ -1,0 +1,54 @@
+services:
+
+  # ---------- SITE 1 ----------
+  db1:
+    image: mariadb:11
+    container_name: db1
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${SITE1_DB_NAME}
+      MYSQL_USER: ${SITE1_DB_USER}
+      MYSQL_PASSWORD: ${SITE1_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${SITE1_DB_ROOT_PASSWORD}
+    volumes:
+      - db1_data:/var/lib/mysql
+    networks:
+      - wp_net
+
+  wordpress1:
+    image: wordpress:latest
+    container_name: wordpress1
+    restart: unless-stopped
+    depends_on:
+      - db1
+    environment:
+      WORDPRESS_DB_HOST: db1
+      WORDPRESS_DB_NAME: ${SITE1_DB_NAME}
+      WORDPRESS_DB_USER: ${SITE1_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${SITE1_DB_PASSWORD}
+    volumes:
+      - wp1_data:/var/www/html
+    networks:
+      - wp_net
+
+  # ---------- REVERSE PROXY ----------
+  nginx-proxy:
+    image: nginx:latest
+    container_name: nginx-proxy
+    restart: unless-stopped
+    depends_on:
+      - wordpress1
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx-proxy/conf.d:/etc/nginx/conf.d
+    networks:
+      - wp_net
+
+networks:
+  wp_net:
+    driver: bridge
+
+volumes:
+  db1_data:
+  wp1_data:
