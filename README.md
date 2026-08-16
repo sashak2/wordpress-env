@@ -35,6 +35,10 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 ### Step 6: Create Nginx reverse proxy config (Site 1 only) ✅
 - Added `nginx-proxy/conf.d/site1.conf` routing `site1.local` → `wordpress1` container
 
+### Step 7: Launch containers ✅
+- Ran `docker compose up -d` — db1, wordpress1, nginx-proxy all started successfully
+- Verified with `docker compose ps` and `docker compose logs`
+
 ## Requirements
 - Ubuntu Server (tested on 26)
 - Docker Engine + Docker Compose plugin
