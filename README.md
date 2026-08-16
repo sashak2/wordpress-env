@@ -50,4 +50,11 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 - VMware VM with bridged networking (for LAN access from other devices)
 
 ## Setup Instructions (for rebuilding on a new machine)
-_(to be filled in as steps are completed)_
+
+1. Install Docker & Docker Compose
+2. Clone this repo: `git clone <repo-url>`
+3. Copy `.env.example` to `.env` and fill in real database credentials
+4. Run `docker compose up -d`
+5. On the client machine, map `site1.local` (and site2/site3 once added) to the server's IP in the local hosts file
+6. Visit `http://site1.local` in a browser and complete the WordPress install
+
