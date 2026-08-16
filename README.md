@@ -20,7 +20,12 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 - Initialized Git repo in `~/wordpress-env`
 - Added `.gitignore` to exclude `.env`, logs, and data folders
 
-### Step 3: (not started yet)
+### Step 3: Plan folder structure ✅
+- Created `nginx-proxy/conf.d/` to hold per-site Nginx reverse proxy configs
+
+### Step 4: Create environment variables file ✅
+- Created `.env` with database credentials for all 3 sites (gitignored)
+- Generated `.env.example` as a safe template for GitHub
 
 ## Requirements
 - Ubuntu Server (tested on 26)
