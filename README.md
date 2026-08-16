@@ -39,6 +39,11 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 - Ran `docker compose up -d` — db1, wordpress1, nginx-proxy all started successfully
 - Verified with `docker compose ps` and `docker compose logs`
 
+### Step 8: Access from laptop browser ✅
+- Added `site1.local` → VM IP mapping in laptop's hosts file
+- Confirmed WordPress install screen loads at http://site1.local
+- Completed WordPress installation for Site 1
+
 ## Requirements
 - Ubuntu Server (tested on 26)
 - Docker Engine + Docker Compose plugin
