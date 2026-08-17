@@ -23,6 +23,47 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 5. On the client machine, map `site1.local` (and site2/site3 once added) to the server's IP in the local hosts file
 6. Visit `http://site1.local` in a browser and complete the WordPress install
 
+## Daily Start/Stop Routine
+
+**Start up:**
+```bash
+# 1. Power on the VM (VMware), then SSH in
+ssh your_username@<vm_ip>
+
+# 2. Start containers
+cd ~/wordpress-env
+docker compose up -d
+docker compose ps   # confirm all services are "Up"
+```
+
+**Shut down:**
+```bash
+# 1. Stop containers (keeps data, cleanly closes DB connections)
+cd ~/wordpress-env
+docker compose down
+
+# 2. Shut down the VM safely (never just close VMware)
+sudo shutdown now
+```
+
+## Useful Docker Commands
+
+| Purpose | Command |
+|---|---|
+| Start all containers | `docker compose up -d` |
+| Stop & remove containers (keep data) | `docker compose down` |
+| Stop & remove containers + **delete data** | `docker compose down -v` ⚠️ |
+| Pause without removing | `docker compose stop` / `docker compose start` |
+| View status | `docker compose ps` |
+| View logs (all / one service) | `docker compose logs -f` / `docker compose logs -f wordpress1` |
+| Restart one service | `docker compose restart nginx-proxy` |
+| Shell into a container | `docker exec -it wordpress1 bash` |
+| Connect to a database | `docker exec -it db1 mariadb -u root -p` |
+| Check disk usage | `docker system df` |
+| Clean up unused images/data | `docker system prune` |
+
+**Note:** `docker compose up -d` is always safe to re-run — it creates what's missing, starts what's stopped, and leaves unchanged running services alone. This is how new sites (site2, site3) get added without disrupting existing ones.
+
 ## Progress Log
 
 ### Step 1: Install Docker & Docker Compose ✅
