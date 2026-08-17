@@ -9,6 +9,20 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 - Use an Nginx reverse proxy to route different local domains to each site
 - Track configuration in Git/GitHub so the environment can be rebuilt elsewhere
 
+## Requirements
+- Ubuntu Server (tested on 26)
+- Docker Engine + Docker Compose plugin
+- VMware VM with bridged networking (for LAN access from other devices)
+
+## Setup Instructions (for rebuilding on a new machine)
+
+1. Install Docker & Docker Compose
+2. Clone this repo: `git clone <repo-url>`
+3. Copy `.env.example` to `.env` and fill in real database credentials
+4. Run `docker compose up -d`
+5. On the client machine, map `site1.local` (and site2/site3 once added) to the server's IP in the local hosts file
+6. Visit `http://site1.local` in a browser and complete the WordPress install
+
 ## Progress Log
 
 ### Step 1: Install Docker & Docker Compose ✅
@@ -44,17 +58,9 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 - Confirmed WordPress install screen loads at http://site1.local
 - Completed WordPress installation for Site 1
 
-## Requirements
-- Ubuntu Server (tested on 26)
-- Docker Engine + Docker Compose plugin
-- VMware VM with bridged networking (for LAN access from other devices)
-
-## Setup Instructions (for rebuilding on a new machine)
-
-1. Install Docker & Docker Compose
-2. Clone this repo: `git clone <repo-url>`
-3. Copy `.env.example` to `.env` and fill in real database credentials
-4. Run `docker compose up -d`
-5. On the client machine, map `site1.local` (and site2/site3 once added) to the server's IP in the local hosts file
-6. Visit `http://site1.local` in a browser and complete the WordPress install
+### Site 2 added ✅
+- Uncommented Site 2 variables in `.env`, regenerated `.env.example`
+- Added `db2`/`wordpress2` services to `docker-compose.yml`
+- Added `nginx-proxy/conf.d/site2.conf`
+- Confirmed accessible at http://site2.local, independent from Site 1
 

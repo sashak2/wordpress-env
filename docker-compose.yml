@@ -31,6 +31,37 @@ services:
     networks:
       - wp_net
 
+# ---------- SITE 2 ----------
+  db2:
+    image: mariadb:11
+    container_name: db2
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${SITE2_DB_NAME}
+      MYSQL_USER: ${SITE2_DB_USER}
+      MYSQL_PASSWORD: ${SITE2_DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${SITE2_DB_ROOT_PASSWORD}
+    volumes:
+      - db2_data:/var/lib/mysql
+    networks:
+      - wp_net
+
+  wordpress2:
+    image: wordpress:latest
+    container_name: wordpress2
+    restart: unless-stopped
+    depends_on:
+      - db2
+    environment:
+      WORDPRESS_DB_HOST: db2
+      WORDPRESS_DB_NAME: ${SITE2_DB_NAME}
+      WORDPRESS_DB_USER: ${SITE2_DB_USER}
+      WORDPRESS_DB_PASSWORD: ${SITE2_DB_PASSWORD}
+    volumes:
+      - wp2_data:/var/www/html
+    networks:
+      - wp_net
+
   # ---------- REVERSE PROXY ----------
   nginx-proxy:
     image: nginx:latest
@@ -38,6 +69,7 @@ services:
     restart: unless-stopped
     depends_on:
       - wordpress1
+      - wordpress2
     ports:
       - "80:80"
     volumes:
@@ -52,3 +84,5 @@ networks:
 volumes:
   db1_data:
   wp1_data:
+  db2_data:
+  wp2_data:
