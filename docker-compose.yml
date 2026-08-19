@@ -71,7 +71,8 @@ services:
       - wordpress1
       - wordpress2
     ports:
-      - "80:80"
+      - "8001:8001"
+      - "8002:8002"
     volumes:
       - ./nginx-proxy/conf.d:/etc/nginx/conf.d
     networks:

@@ -20,8 +20,8 @@ A self-hosted environment running multiple WordPress sites using Docker on Ubunt
 2. Clone this repo: `git clone <repo-url>`
 3. Copy `.env.example` to `.env` and fill in real database credentials
 4. Run `docker compose up -d`
-5. On the client machine, map `site1.local` (and site2/site3 once added) to the server's IP in the local hosts file
-6. Visit `http://site1.local` in a browser and complete the WordPress install
+5. Visit `http://<vm_ip>:8001` (site1), `http://<vm_ip>:8002` (site2) etc. in a browser and complete the WordPress install
+   - No hosts file editing needed — sites are distinguished by port, not hostname
 
 ## Daily Start/Stop Routine
 
@@ -105,3 +105,17 @@ sudo shutdown now
 - Added `nginx-proxy/conf.d/site2.conf`
 - Confirmed accessible at http://site2.local, independent from Site 1
 
+### Switched to port-based access (no hosts file needed) ✅
+- Changed Nginx configs from hostname-based (`server_name site1.local`) to port-based routing
+- `nginx-proxy` now listens on 8001 (site1) and 8002 (site2), mapped via `docker-compose.yml` ports
+- Access via `http://<vm_ip>:8001` and `http://<vm_ip>:8002` — no laptop hosts file editing required
+
+### Fixed: WordPress install redirect losing the port ✅
+- **Issue:** Visiting `http://<vm_ip>:8001` redirected to `http://<vm_ip>/wp-admin/install.php` (no port) → "refused to connect"
+- **Cause:** Nginx's `proxy_set_header Host $host;` strips the port number before forwarding to WordPress, so WordPress generated URLs without it
+- **Fix:** Changed `$host` → `$http_host` in both site configs, which preserves the port from the original request
+- Rebuilt both sites clean (`docker compose down -v` + `up -d`) after the fix to clear broken install state
+
+## Access URLs
+- Site 1: `http://<vm_ip>:8001`
+- Site 2: `http://<vm_ip>:8002`
